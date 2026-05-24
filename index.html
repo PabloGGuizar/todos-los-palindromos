@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos los Palíndromos - Proyecto & Corpus</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary-grad: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.35);
+            --accent-es: #3b82f6;
+            --accent-cat: #f59e0b;
+        }
+
+        body.light-theme {
+            --bg-color: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(15, 23, 42, 0.08);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-glow: rgba(139, 92, 246, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Fondos Dinámicos de Brillo (Blobs) */
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: var(--primary-grad);
+            filter: blur(130px);
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+            animation: float 20s infinite alternate;
+            transition: opacity 0.3s ease;
+        }
+
+        body.light-theme .blob {
+            opacity: 0.06;
+        }
+
+        .blob-1 {
+            top: -100px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            bottom: -150px;
+            right: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, 40px) scale(1.1); }
+        }
+
+        header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-area {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Barra de Controles del Header */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        body.light-theme .icon-btn {
+            background: rgba(15, 23, 42, 0.03);
+        }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+            border-color: var(--accent);
+        }
+
+        body.light-theme .icon-btn:hover {
+            background: rgba(15, 23, 42, 0.06);
+        }
+
+        .header-select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 99px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 0.8em;
+        }
+
+        body.light-theme .header-select {
+            background: rgba(15, 23, 42, 0.03);
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 0.8em;
+        }
+
+        .header-select:focus {
+            border-color: var(--accent);
+        }
+
+        .header-select option {
+            background-color: #0b0f19;
+            color: #f8fafc;
+        }
+
+        body.light-theme .header-select option {
+            background-color: #ffffff;
+            color: #0f172a;
+        }
+
+        .hero {
+            max-width: 1000px;
+            margin: 4rem auto 2rem auto;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero h1 span {
+            font-style: italic;
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2.5rem auto;
+            font-weight: 300;
+        }
+
+        /* Botón de Llamada a la Acción (Play Button) */
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-decoration: none;
+            background: var(--primary-grad);
+            border-radius: 99px;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.5);
+        }
+
+        .cta-btn:hover::before {
+            opacity: 1;
+        }
+
+        .cta-btn svg {
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-btn:hover svg {
+            transform: translateX(5px);
+        }
+
+        /* Sección de Estadísticas (Stats) */
+        .stats-section {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-grad);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .stat-card:hover {
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card:hover::after {
+            opacity: 1;
+        }
+
+        .stat-val {
+            font-size: 2.75rem;
+            font-weight: 800;
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Sección de Información de los Corpus */
+        .info-section {
+            max-width: 1100px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .info-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .info-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-content h2 span {
+            background: var(--primary-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .info-content p {
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        .info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+        }
+
+        .info-card-icon {
+            padding: 0.75rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.light-theme .info-card-icon {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .info-card-es {
+            border-left: 4px solid var(--accent-es);
+        }
+
+        .info-card-cat {
+            border-left: 4px solid var(--accent-cat);
+        }
+
+        .info-card-details h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card-details p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        /* Sección del Explorador Interactivo */
+        .explorer-section {
+            max-width: 1100px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .explorer-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .explorer-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .explorer-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .search-input-wrapper svg {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 99px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme .search-input {
+            background: rgba(15, 23, 42, 0.03);
+        }
+
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        body.light-theme .search-input:focus {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+        }
+
+        .filter-select {
+            padding: 1rem 2.25rem 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            border-radius: 99px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+
+        body.light-theme .filter-select {
+            background: rgba(15, 23, 42, 0.03);
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        .filter-select:focus {
+            border-color: var(--accent);
+        }
+
+        .filter-select option {
+            background-color: #0b0f19;
+            color: #f8fafc;
+        }
+
+        body.light-theme .filter-select option {
+            background-color: #ffffff;
+            color: #0f172a;
+        }
+
+        .explorer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            min-height: 200px;
+        }
+
+        .palindrome-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .palindrome-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        body.light-theme .palindrome-card:hover {
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .lang-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .lang-badge-es {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        body.light-theme .lang-badge-es {
+            background: rgba(37, 99, 235, 0.1);
+            color: #2563eb;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .lang-badge-cat {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        body.light-theme .lang-badge-cat {
+            background: rgba(217, 119, 6, 0.1);
+            color: #d97706;
+            border: 1px solid rgba(217, 119, 6, 0.2);
+        }
+
+        .len-badge {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        body.light-theme .len-badge {
+            background: rgba(15, 23, 42, 0.04);
+        }
+
+        .card-word {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .card-lemma {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+            font-style: italic;
+        }
+
+        .card-links {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .card-link {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .card-link-dict {
+            background: rgba(139, 92, 246, 0.1);
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        body.light-theme .card-link-dict {
+            background: rgba(124, 58, 237, 0.08);
+            color: #7c3aed;
+            border: 1px solid rgba(124, 58, 237, 0.15);
+        }
+
+        .card-link-dict:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        body.light-theme .card-link-dict:hover {
+            background: rgba(124, 58, 237, 0.15);
+        }
+
+        .card-link-wiki {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+        }
+
+        body.light-theme .card-link-wiki {
+            background: rgba(15, 23, 42, 0.02);
+            border: 1px solid var(--card-border);
+        }
+
+        .card-link-wiki:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        body.light-theme .card-link-wiki:hover {
+            background: rgba(15, 23, 42, 0.05);
+        }
+
+        .loading-text {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 5rem;
+        }
+
+        footer a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <header>
+        <div class="logo-area">Todos los Palíndromos</div>
+        <div class="header-actions">
+            <!-- Selector de Idioma -->
+            <select id="header-lang-select" class="header-select" title="Seleccionar idioma">
+                <option value="es">Español</option>
+                <option value="cat">Català</option>
+            </select>
+            
+            <!-- Botón de Tema (con iconos Sol/Luna) -->
+            <button id="theme-toggle-btn" class="icon-btn" title="Cambiar tema">
+                <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-2.659l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
+                <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 id="hero-title">El fascinante universo de los <span>Palíndromos</span></h1>
+            <p id="hero-sub">
+                Un proyecto dedicado a recopilar, procesar y validar las palabras y frases simétricas más singulares de los idiomas español y catalán.
+            </p>
+            <a href="./juego-puzzle/" class="cta-btn" id="play-btn-main">
+                Probar Constructor de Palíndromos
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="20" height="20">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+            </a>
+        </section>
+
+        <!-- Sección de Estadísticas -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-total">-</div>
+                    <div class="stat-label" id="lbl-stat-total">Palíndromos Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-es">-</div>
+                    <div class="stat-label" id="lbl-stat-es">Corpus Español</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-cat">-</div>
+                    <div class="stat-label" id="lbl-stat-cat">Corpus Catalán</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-val" id="stat-max-len">-</div>
+                    <div class="stat-label" id="lbl-stat-max-len">Longitud Máxima</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Información de los Corpus -->
+        <section class="info-section">
+            <div class="info-content">
+                <h2 id="info-title">Reuniendo dos <span>Corpus Lingüísticos</span></h2>
+                <p id="info-p1">
+                    Este proyecto fusiona y enriquece dos extensas colecciones de palíndromos en español y catalán. Cada palabra ha sido analizada y contrastada de manera programática.
+                </p>
+                <p id="info-p2">
+                    A través de scripts de validación, se comprueba la existencia de cada término en los diccionarios normativos (el Diccionario de la Lengua Española para el corpus español y el DIEC/Wiktionary para el catalán), asegurando la validez léxica de las palabras que componen el proyecto.
+                </p>
+            </div>
+            <div class="info-cards">
+                <div class="info-card info-card-es">
+                    <div class="info-card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="28" height="28" style="color: var(--accent-es);"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
+                    </div>
+                    <div class="info-card-details">
+                        <h3 id="card-es-title">Corpus Español</h3>
+                        <p id="card-es-text">Vocablos simétricos verificados en el diccionario de la Real Academia Española (DLE) con definiciones accesibles.</p>
+                    </div>
+                </div>
+                <div class="info-card info-card-cat">
+                    <div class="info-card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="28" height="28" style="color: var(--accent-cat);"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
+                    </div>
+                    <div class="info-card-details">
+                        <h3 id="card-cat-title">Corpus Català</h3>
+                        <p id="card-cat-text">Colección de palabras palíndromas en lengua catalana validadas con el DIEC o referencias en Wiktionary.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Explorador Interactivo -->
+        <section class="explorer-section">
+            <div class="explorer-header">
+                <h2 id="explorer-title">Explorador de Palíndromos</h2>
+                <p id="explorer-sub">Busca entre las palabras del corpus enriquecido y consulta sus significados en los diccionarios oficiales.</p>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" width="20" height="20">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.602 10.602Z" />
+                    </svg>
+                    <input type="text" id="search-box" class="search-input" placeholder="Escribe para buscar un palíndromo...">
+                </div>
+                <select id="lang-filter" class="filter-select">
+                    <option value="all">Todos los idiomas</option>
+                    <option value="es">Español</option>
+                    <option value="cat">Català</option>
+                </select>
+                <select id="len-filter" class="filter-select">
+                    <option value="all">Cualquier longitud</option>
+                    <option value="3">3 letras</option>
+                    <option value="4">4 letras</option>
+                    <option value="5">5 letras</option>
+                    <option value="6">6 letras</option>
+                    <option value="7">7 letras</option>
+                    <option value="8+">8+ letras</option>
+                </select>
+            </div>
+
+            <div id="explorer-grid" class="explorer-grid">
+                <div class="loading-text">Cargando corpus de palíndromos...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p id="footer-text">&copy; 2026 Todos los Palíndromos &amp; <a href="./juego-puzzle/">Constructor de palíndromos</a> — Desarrollado por <a href="https://www.linkedin.com/in/pablogguizar/" target="_blank">Pablo G. Guízar</a>. Código abierto bajo licencia MIT disponible en <a href="https://github.com/PabloGGuizar/todos-los-palindromos" target="_blank">GitHub</a>.</p>
+    </footer>
+
+    <script>
+        let allPalindromes = [];
+
+        // Diccionario de Traducciones para la Landing Page
+        const i18n = {
+            es: {
+                heroTitle: "El fascinante universo de los <span>Palíndromos</span>",
+                heroSub: "Un proyecto dedicado a recopilar, procesar y validar las palabras y frases simétricas más singulares de los idiomas español y catalán.",
+                playBtnText: "Probar Constructor de Palíndromos",
+                playBtnHeader: "Jugar al Puzzle",
+                statTotal: "Palíndromos Totales",
+                statEs: "Corpus Español",
+                statCat: "Corpus Catalán",
+                statMaxLen: "Longitud Máxima",
+                infoTitle: "Reuniendo dos <span>Corpus Lingüísticos</span>",
+                infoP1: "Este proyecto fusiona y enriquece dos extensas colecciones de palíndromos en español y catalán. Cada palabra ha sido analizada y contrastada de manera programática.",
+                infoP2: "A través de scripts de validación, se comprueba la existencia de cada término en los diccionarios normativos (el Diccionario de la Lengua Española para el corpus español y el DIEC/Wiktionary para el catalán), asegurando la validez léxica de las palabras que componen el proyecto.",
+                cardEsTitle: "Corpus Español",
+                cardEsText: "Vocablos simétricos verificados en el diccionario de la Real Academia Española (DLE) con definiciones accesibles.",
+                cardCatTitle: "Corpus Catalán",
+                cardCatText: "Colección de palabras palíndromas en lengua catalana validadas con el DIEC o referencias en Wiktionary.",
+                explorerTitle: "Explorador de Palíndromos",
+                explorerSub: "Busca entre las palabras del corpus enriquecido y consulta sus significados en los diccionarios oficiales.",
+                searchPlaceholder: "Escribe para buscar un palíndromo...",
+                optAllLangs: "Todos los idiomas",
+                optEs: "Español",
+                optCat: "Català",
+                optAllLens: "Cualquier longitud",
+                optLens: "letras",
+                opt8Plus: "8+ letras",
+                footerText: "Todos los Palíndromos &amp; <a href='./juego-puzzle/'>Constructor de palíndromos</a> — Desarrollado por <a href='https://www.linkedin.com/in/pablogguizar/' target='_blank'>Pablo G. Guízar</a>. Código abierto bajo licencia MIT disponible en <a href='https://github.com/PabloGGuizar/todos-los-palindromos' target='_blank'>GitHub</a>.",
+                loadingText: "Cargando corpus de palíndromos...",
+                errorText: "Error al cargar las palabras del corpus.",
+                noResults: "No se encontraron palíndromos que coincidan con los filtros seleccionados.",
+                showingMatches: "Mostrando 24 de {total} coincidencias. Escribe más letras para filtrar.",
+                btnDict: "Diccionario",
+                btnWiki: "Wiktionary",
+                btnNoDef: "Sin definición"
+            },
+            cat: {
+                heroTitle: "El fascinant univers dels <span>Palíndroms</span>",
+                heroSub: "Un projecte dedicat a recopilar, processar i validar les paraules i frases simètriques més singulars dels idiomes espanyol i català.",
+                playBtnText: "Provar Constructor de Palíndroms",
+                playBtnHeader: "Jugar al Puzzle",
+                statTotal: "Palíndroms Totals",
+                statEs: "Corpus Espanyol",
+                statCat: "Corpus Català",
+                statMaxLen: "Longitud Màxima",
+                infoTitle: "Reunint dos <span>Corpus Lingüístics</span>",
+                infoP1: "Aquest projecte fusiona i enriqueix dues extenses col·leccions de palíndroms en espanyol i català. Cada paraula ha estat analitzada i contrastada de manera programàtica.",
+                infoP2: "A través de scripts de validació, es comprova l'existència de cada terme en els diccionaris normatius (el Diccionario de la Lengua Española per al corpus espanyol i el DIEC/Wiktionary per al català), assegurant la validesa lèxica de les paraules que componen el projecte.",
+                cardEsTitle: "Corpus Espanyol",
+                cardEsText: "Vocables simètrics verificats en el diccionari de la Reial Acadèmia Espanyola (DLE) amb definicions accessibles.",
+                cardCatTitle: "Corpus Català",
+                cardCatText: "Col·lecció de paraules palíndromes en llengua catalana validades amb el DIEC o referències a Wiktionary.",
+                explorerTitle: "Explorador de Palíndroms",
+                explorerSub: "Cerca entre les paraules del corpus enriquit i consulta els seus significats en els diccionaris oficials.",
+                searchPlaceholder: "Escriu per cercar un palíndrom...",
+                optAllLangs: "Tots els idiomes",
+                optEs: "Espanyol",
+                optCat: "Català",
+                optAllLens: "Qualsevol longitud",
+                optLens: "lletres",
+                opt8Plus: "8+ lletres",
+                footerText: "Todos los Palíndromos &amp; <a href='./juego-puzzle/'>Constructor de palíndroms</a> — Desenvolupat per <a href='https://www.linkedin.com/in/pablogguizar/' target='_blank'>Pablo G. Guízar</a>. Codi obert sota llicència MIT disponible a <a href='https://github.com/PabloGGuizar/todos-los-palindromos' target='_blank'>GitHub</a>.",
+                loadingText: "Carregant corpus de palíndroms...",
+                errorText: "Error en carregar les paraules del corpus.",
+                noResults: "No s'han trobat palíndroms que coincideixin amb els filtres seleccionats.",
+                showingMatches: "Mostrant 24 de {total} coincidències. Escriu més lletres per filtrar.",
+                btnDict: "Diccionari",
+                btnWiki: "Wiktionary",
+                btnNoDef: "Sense definició"
+            }
+        };
+
+        // Inicializar y alternar tema (Sincronizado con localStorage para coincidir con el juego)
+        function initTheme() {
+            const body = document.body;
+            const iconSun = document.getElementById('icon-sun');
+            const iconMoon = document.getElementById('icon-moon');
+            const themeBtn = document.getElementById('theme-toggle-btn');
+            
+            if (localStorage.getItem('theme') === 'light') {
+                body.classList.add('light-theme');
+                iconSun.style.display = 'none';
+                iconMoon.style.display = 'block';
+            }
+            
+            themeBtn.addEventListener('click', () => {
+                if (body.classList.contains('light-theme')) {
+                    body.classList.remove('light-theme');
+                    localStorage.setItem('theme', 'dark');
+                    iconSun.style.display = 'block';
+                    iconMoon.style.display = 'none';
+                } else {
+                    body.classList.add('light-theme');
+                    localStorage.setItem('theme', 'light');
+                    iconSun.style.display = 'none';
+                    iconMoon.style.display = 'block';
+                }
+            });
+        }
+
+        // Actualizar textos del DOM según idioma seleccionado
+        function updateUILanguage() {
+            const lang = document.getElementById('header-lang-select').value;
+            const t = i18n[lang];
+            
+            // Actualizar textos de la UI
+            document.getElementById('hero-title').innerHTML = t.heroTitle;
+            document.getElementById('hero-sub').textContent = t.heroSub;
+            document.getElementById('play-btn-main').innerHTML = `${t.playBtnText} <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>`;
+            
+            document.getElementById('lbl-stat-total').textContent = t.statTotal;
+            document.getElementById('lbl-stat-es').textContent = t.statEs;
+            document.getElementById('lbl-stat-cat').textContent = t.statCat;
+            document.getElementById('lbl-stat-max-len').textContent = t.statMaxLen;
+            
+            document.getElementById('info-title').innerHTML = t.infoTitle;
+            document.getElementById('info-p1').textContent = t.infoP1;
+            document.getElementById('info-p2').textContent = t.infoP2;
+            
+            document.getElementById('card-es-title').textContent = t.cardEsTitle;
+            document.getElementById('card-es-text').textContent = t.cardEsText;
+            document.getElementById('card-cat-title').textContent = t.cardCatTitle;
+            document.getElementById('card-cat-text').textContent = t.cardCatText;
+            
+            document.getElementById('explorer-title').textContent = t.explorerTitle;
+            document.getElementById('explorer-sub').textContent = t.explorerSub;
+            document.getElementById('search-box').placeholder = t.searchPlaceholder;
+            
+            // Filtros
+            document.querySelector('#lang-filter option[value="all"]').textContent = t.optAllLangs;
+            document.querySelector('#lang-filter option[value="es"]').textContent = t.optEs;
+            document.querySelector('#lang-filter option[value="cat"]').textContent = t.optCat;
+            
+            document.querySelector('#len-filter option[value="all"]').textContent = t.optAllLens;
+            document.querySelector('#len-filter option[value="3"]').textContent = `3 ${t.optLens}`;
+            document.querySelector('#len-filter option[value="4"]').textContent = `4 ${t.optLens}`;
+            document.querySelector('#len-filter option[value="5"]').textContent = `5 ${t.optLens}`;
+            document.querySelector('#len-filter option[value="6"]').textContent = `6 ${t.optLens}`;
+            document.querySelector('#len-filter option[value="7"]').textContent = `7 ${t.optLens}`;
+            document.querySelector('#len-filter option[value="8+"]').textContent = t.opt8Plus;
+            
+            // Footer
+            document.getElementById('footer-text').innerHTML = `&copy; 2026 ${t.footerText}`;
+            
+            // Re-renderizar el explorador para aplicar traducciones en las tarjetas
+            renderPalindromes();
+        }
+
+        // Inicialización y carga de JSON
+        async function loadCorpus() {
+            try {
+                const [resEs, resCat] = await Promise.all([
+                    fetch('./palindromos_es_enriquecidos.json').then(r => r.json()).catch(() => []),
+                    fetch('./palindromos_cat_enriquecidos.json').then(r => r.json()).catch(() => [])
+                ]);
+
+                // Combinar datos
+                const esData = resEs.map(p => ({ ...p, lang: 'es' }));
+                const catData = resCat.map(p => ({ ...p, lang: 'cat' }));
+                allPalindromes = [...esData, ...catData].filter(p => p.palabra);
+
+                // Calcular estadísticas
+                const totalCount = allPalindromes.length;
+                const esCount = esData.length;
+                const catCount = catData.length;
+                const maxLen = allPalindromes.reduce((max, p) => Math.max(max, p.palabra.length), 0);
+
+                // Mostrar estadísticas con animación
+                animateNumber('stat-total', totalCount);
+                animateNumber('stat-es', esCount);
+                animateNumber('stat-cat', catCount);
+                animateNumber('stat-max-len', maxLen);
+
+                // Configurar eventos del idioma en el header
+                const langSelect = document.getElementById('header-lang-select');
+                langSelect.addEventListener('change', updateUILanguage);
+                
+                // Cargar idioma por defecto del sistema o navegador si corresponde
+                const systemLang = navigator.language || navigator.userLanguage;
+                if (systemLang.startsWith('ca')) {
+                    langSelect.value = 'cat';
+                }
+                
+                // Actualizar textos inicialmente
+                updateUILanguage();
+
+                // Añadir event listeners para los filtros del explorador
+                document.getElementById('search-box').addEventListener('input', renderPalindromes);
+                document.getElementById('lang-filter').addEventListener('change', renderPalindromes);
+                document.getElementById('len-filter').addEventListener('change', renderPalindromes);
+
+            } catch (e) {
+                console.error("Error al cargar el corpus:", e);
+                const currentLang = document.getElementById('header-lang-select').value;
+                const t = i18n[currentLang];
+                document.getElementById('explorer-grid').innerHTML = `<div class="loading-text">${t.errorText}</div>`;
+            }
+        }
+
+        // Animación suave para los números
+        function animateNumber(elementId, targetValue) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            let current = 0;
+            const step = Math.ceil(targetValue / 40);
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= targetValue) {
+                    el.textContent = targetValue;
+                    clearInterval(timer);
+                } else {
+                    el.textContent = current;
+                }
+            }, 25);
+        }
+
+        // Renderizado del explorador
+        function renderPalindromes() {
+            const grid = document.getElementById('explorer-grid');
+            const searchVal = document.getElementById('search-box').value.toLowerCase().trim();
+            const langVal = document.getElementById('lang-filter').value;
+            const lenVal = document.getElementById('len-filter').value;
+            const currentLang = document.getElementById('header-lang-select').value;
+            const t = i18n[currentLang];
+
+            if (allPalindromes.length === 0) return;
+
+            // Filtrar
+            let filtered = allPalindromes.filter(p => {
+                const matchSearch = p.palabra.toLowerCase().includes(searchVal) || 
+                                    (p.lema && p.lema.toLowerCase().includes(searchVal));
+                
+                const matchLang = langVal === 'all' || p.lang === langVal;
+
+                let matchLen = true;
+                const len = p.palabra.length;
+                if (lenVal !== 'all') {
+                    if (lenVal === '8+') {
+                        matchLen = len >= 8;
+                    } else {
+                        matchLen = len === parseInt(lenVal);
+                    }
+                }
+
+                return matchSearch && matchLang && matchLen;
+            });
+
+            const totalFilteredCount = filtered.length;
+            const displayList = filtered.slice(0, 24);
+
+            if (displayList.length === 0) {
+                grid.innerHTML = `<div class="no-results">${t.noResults}</div>`;
+                return;
+            }
+
+            let html = '';
+            displayList.forEach(p => {
+                const isEs = p.lang === 'es';
+                const hasDict = p.enlace_diccionario_valido && p.enlace_diccionario;
+                const hasWiki = p.enlace_wiktionary_valido && p.enlace_wiktionary;
+                const langLabel = isEs ? (currentLang === 'es' ? 'Español' : 'Espanyol') : 'Català';
+                const lenLabel = `${p.palabra.length} ${t.optLens}`;
+
+                html += `
+                    <div class="palindrome-card">
+                        <div>
+                            <div class="card-top">
+                                <span class="lang-badge lang-badge-${p.lang}">${langLabel}</span>
+                                <span class="len-badge">${lenLabel}</span>
+                            </div>
+                            <div class="card-word">${p.palabra}</div>
+                            <div class="card-lemma">${p.lema ? 'Lema: ' + p.lema : '&nbsp;'}</div>
+                        </div>
+                        <div class="card-links">
+                            ${hasDict ? `<a href="${p.enlace_diccionario}" target="_blank" class="card-link card-link-dict">${t.btnDict}</a>` : ''}
+                            ${hasWiki ? `<a href="${p.enlace_wiktionary}" target="_blank" class="card-link card-link-wiki">${t.btnWiki}</a>` : ''}
+                            ${!hasDict && !hasWiki ? `<span class="card-link" style="color: var(--text-muted); cursor: default;">${t.btnNoDef}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (totalFilteredCount > 24) {
+                html += `
+                    <div class="loading-text" style="grid-column: 1 / -1; padding-top: 1rem;">
+                        ${t.showingMatches.replace('{total}', totalFilteredCount)}
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        // Cargar corpus y tema al cargar ventana
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            loadCorpus();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constructor de palíndromos</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Top Bar para acciones globales -->
+        <div class="top-bar">
+            <button id="info-btn" class="icon-btn" title="Instrucciones">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
+            </button>
+            <button id="theme-btn" class="icon-btn" title="Cambiar Tema">
+                <!-- Por defecto Sol (Light Mode toggle implies it's currently dark, so show Sun) -->
+                <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-2.659l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
+                <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24" style="display: none;"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+            </button>
+        </div>
+
+        <!-- Pantalla de Inicio -->
+        <div id="start-screen" class="screen active">
+            <div class="glass-panel">
+                <h1>Constructor de palíndromos</h1>
+                <p class="subtitle">Ordena las letras para revelar la palabra oculta.</p>
+                <div class="controls">
+                    <label for="language-select" id="lbl-lang">Idioma:</label>
+                    <select id="language-select">
+                        <option value="es">Español</option>
+                        <option value="cat">Català</option>
+                    </select>
+
+                    <label for="difficulty-select">Dificultad (Longitud de la palabra):</label>
+                    <select id="difficulty-select">
+                        <option value="auto">Progresivo (Empezar por 3 letras)</option>
+                        <option value="3">3 Letras</option>
+                        <option value="4">4 Letras</option>
+                        <option value="5">5 Letras</option>
+                        <option value="6">6 Letras</option>
+                        <option value="7">7 Letras</option>
+                        <option value="random">Aleatorio (¡Sorpréndeme!)</option>
+                    </select>
+                    <button id="start-btn" class="primary-btn">Comenzar a Jugar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de Juego -->
+        <div id="game-screen" class="screen">
+            <header>
+                <button id="back-btn" class="icon-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" style="vertical-align: middle; margin-right: 4px;"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+                    <span id="back-text">Salir</span>
+                </button>
+                <button id="solve-btn" class="icon-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20" style="vertical-align: middle; margin-right: 4px;"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /></svg>
+                    <span id="solve-text">Solución</span>
+                </button>
+                <div class="stats">
+                    <div class="stat" style="display: flex; align-items: center; gap: 4px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                        <span id="time-display">00:00</span>
+                    </div>
+                    <div class="stat" style="display: flex; align-items: center; gap: 4px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                        <span id="moves-display">0</span>
+                    </div>
+                </div>
+                <div class="level-indicator">Nivel: <span id="level-display">1</span></div>
+            </header>
+
+            <main>
+                <div id="puzzle-container" class="puzzle-container">
+                    <!-- Las baldosas se generarán dinámicamente aquí -->
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal de Victoria -->
+        <div id="victory-modal" class="modal">
+            <div class="modal-content glass-panel">
+                <h2>¡Completado!</h2>
+                <div class="victory-stats">
+                    <p>Tiempo: <strong id="victory-time">00:00</strong></p>
+                    <p>Movimientos: <strong id="victory-moves">0</strong></p>
+                </div>
+                
+                <div class="palindrome-info">
+                    <h3 id="palindrome-word">PALABRA</h3>
+                    <p id="palindrome-lemma">Lema: <span>lema</span></p>
+                    <div class="links">
+                        <a id="link-dle" href="#" target="_blank" class="link-btn">Diccionario</a>
+                        <a id="link-wiki" href="#" target="_blank" class="link-btn">Wiktionary</a>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button id="next-level-btn" class="primary-btn">Siguiente Nivel</button>
+                    <button id="play-again-btn" class="secondary-btn">Jugar Otra Vez</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Instrucciones -->
+        <div id="info-modal" class="modal">
+            <div class="modal-content glass-panel">
+                <h2 id="info-title">Instrucciones</h2>
+                <div class="info-text">
+                    <p id="info-p1">El objetivo del juego es ordenar las letras para formar un palíndromo oculto.</p>
+                    <p id="info-p2">Las fichas punteadas son vacías y pueden moverse libremente. El objetivo es colocar las letras en orden (de izquierda a derecha, de arriba a abajo) y dejar las fichas vacías al final.</p>
+                    <p id="info-p3">¡Intenta hacerlo en la menor cantidad de movimientos y tiempo posible!</p>
+                </div>
+                <div class="modal-actions">
+                    <button id="close-info-btn" class="primary-btn">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

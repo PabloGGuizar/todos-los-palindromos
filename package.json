@@ -1,0 +1,17 @@
+{
+  "name": "todos-los-palindromos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "an-array-of-catalan-words": "^1.0.2",
+    "an-array-of-spanish-words": "^2.0.0",
+    "node-nlp": "^5.0.0-alpha.5"
+  }
+}
