@@ -486,3 +486,36 @@ body.light-theme .link-btn:hover {
     .puzzle-container { border-radius: 0.5rem; }
     .modal-actions { flex-direction: column; }
 }
+
+/* Footer del juego */
+.game-footer {
+    width: 100%;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: auto;
+    font-size: 0.85rem;
+    color: #64748b;
+    z-index: 10;
+}
+
+body.light-theme .game-footer {
+    color: #475569;
+}
+
+.game-footer a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.game-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Alineación para botón de retorno tipo enlace en top-bar */
+a.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}

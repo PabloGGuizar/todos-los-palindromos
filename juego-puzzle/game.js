@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alertNoWords: "No hay palíndromos disponibles para esta dificultad.",
             alertMaxLen: "¡Felicidades! Has concluido el juego. Ya no hay más niveles disponibles.",
             alertError: "Hubo un error cargando los datos del juego.",
+            footerHTML: "Constructor de palíndromos — Desarrollado por <a href='https://www.linkedin.com/in/pablogguizar/' target='_blank'>Pablo G. Guízar</a>. Código abierto bajo licencia MIT disponible en <a href='https://github.com/PabloGGuizar/todos-los-palindromos' target='_blank'>GitHub</a>.",
             infoTitle: "Instrucciones",
             infoP1: "El objetivo del juego es ordenar las letras para formar un palíndromo oculto.",
             infoP2: "Las fichas punteadas son vacías y pueden moverse libremente. El objetivo es colocar las letras en orden (de izquierda a derecha, de arriba a abajo) y dejar las fichas vacías al final.",
@@ -127,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alertNoWords: "No hi ha palíndroms disponibles per a aquesta dificultat.",
             alertMaxLen: "Felicitats! Has completat el joc. Ja no hi ha més nivells disponibles.",
             alertError: "S'ha produït un error en carregar les dades del joc.",
+            footerHTML: "Constructor de palíndroms — Desenvolupat per <a href='https://www.linkedin.com/in/pablogguizar/' target='_blank'>Pablo G. Guízar</a>. Codi obert sota llicència MIT disponible a <a href='https://github.com/PabloGGuizar/todos-los-palindromos' target='_blank'>GitHub</a>.",
             infoTitle: "Instruccions",
             infoP1: "L'objectiu del joc és ordenar les lletres per formar un palíndrom ocult.",
             infoP2: "Les fitxes puntejades són buides i es poden moure lliurement. L'objectiu és col·locar les lletres en ordre (d'esquerra a dreta, de dalt a baix) i deixar les fitxes buides al final.",
@@ -204,6 +206,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('info-p2').textContent = t.infoP2;
         document.getElementById('info-p3').textContent = t.infoP3;
         document.getElementById('close-info-btn').textContent = t.closeInfo;
+        
+        // Traducir el footer en todas las pantallas del juego
+        document.querySelectorAll('.game-footer-text').forEach(el => {
+            el.innerHTML = `&copy; 2026 ${t.footerHTML}`;
+        });
     }
 
     // Navegación de pantallas
