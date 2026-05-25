@@ -100,6 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
             alertNoWords: "No hay palíndromos disponibles para esta dificultad.",
             alertMaxLen: "¡Felicidades! Has concluido el juego. Ya no hay más niveles disponibles.",
             alertError: "Hubo un error cargando los datos del juego.",
+            gameOverTitle: "¡Felicidades!",
+            gameOverMessage: "Has concluido el juego. Ya no hay más niveles disponibles.",
+            gameOverBtn: "Volver al Inicio",
             footerHTML: "Constructor de palíndromos — Desarrollado por <a href='https://www.linkedin.com/in/pablogguizar/' target='_blank'>Pablo G. Guízar</a>. Código abierto bajo licencia MIT disponible en <a href='https://github.com/PabloGGuizar/todos-los-palindromos' target='_blank'>GitHub</a>.",
             infoTitle: "Instrucciones",
             infoP1: "El objetivo del juego es ordenar las letras para formar un palíndromo oculto.",
@@ -128,6 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
             alertNoWords: "No hi ha palíndroms disponibles per a aquesta dificultat.",
             alertMaxLen: "Felicitats! Has completat el joc. Ja no hi ha més nivells disponibles.",
             alertError: "S'ha produït un error en carregar les dades del joc.",
+            gameOverTitle: "Felicitats!",
+            gameOverMessage: "Has completat el joc. Ja no hi ha més nivells disponibles.",
+            gameOverBtn: "Tornar a l'Inici",
             footerHTML: "Constructor de palíndroms — Desenvolupat per <a href='https://www.linkedin.com/in/pablogguizar/' target='_blank'>Pablo G. Guízar</a>. Codi obert sota llicència MIT disponible a <a href='https://github.com/PabloGGuizar/todos-los-palindromos' target='_blank'>GitHub</a>.",
             infoTitle: "Instruccions",
             infoP1: "L'objectiu del joc és ordenar les lletres per formar un palíndrom ocult.",
@@ -206,6 +212,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('info-p2').textContent = t.infoP2;
         document.getElementById('info-p3').textContent = t.infoP3;
         document.getElementById('close-info-btn').textContent = t.closeInfo;
+
+        // Fin de juego modal
+        document.getElementById('game-over-title').textContent = t.gameOverTitle;
+        document.getElementById('game-over-message').textContent = t.gameOverMessage;
+        document.getElementById('game-over-btn').textContent = t.gameOverBtn;
         
         // Traducir el footer en todas las pantallas del juego
         document.querySelectorAll('.game-footer-text').forEach(el => {
@@ -548,8 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (candidatesWithGreaterLen.length === 0) {
                 // No hay más niveles de longitud superior, juego finalizado
-                alert(i18n[lang].alertMaxLen);
-                showScreen('start');
+                document.getElementById('game-over-modal').classList.add('active');
                 return;
             }
             
@@ -577,6 +587,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('close-info-btn').addEventListener('click', () => {
         document.getElementById('info-modal').classList.remove('active');
+    });
+
+    document.getElementById('game-over-btn').addEventListener('click', () => {
+        document.getElementById('game-over-modal').classList.remove('active');
+        showScreen('start');
     });
 
     document.getElementById('theme-btn').addEventListener('click', () => {
