@@ -33,7 +33,7 @@ El proyecto une dos colecciones de corpus enriquecidos de manera programática, 
   * `palindromos_es_enriquecidos.json`: Corpus estructurado y verificado en español.
   * `palindromos_cat_enriquecidos.json`: Corpus estructurado y verificado en catalán.
   * Scripts de procesamiento de datos: `enriquecer.js`, `validar_enlaces.js`.
-* **`/juego-puzzle`**:
+* **`/constructor-de-palindromos`**:
   * `index.html`: Estructura HTML de la interfaz del Constructor de Palíndromos.
   * `style.css`: Estilos visuales del juego (soporte de animaciones, temas claros y oscuros).
   * `game.js`: Lógica interactiva del juego (movimiento de fichas, sonido Web Audio API, progresión inteligente de niveles).
@@ -57,7 +57,7 @@ Debido a que el navegador restringe la lectura de archivos JSON locales (`fetch`
    ```
 4. Abre tu navegador de preferencia y accede a:
    * **Sitio Principal y Explorador**: [http://localhost:8000](http://localhost:8000)
-   * **Constructor de Palíndromos (Juego)**: [http://localhost:8000/juego-puzzle/](http://localhost:8000/juego-puzzle/)
+   * **Constructor de Palíndromos (Juego)**: [http://localhost:8000/constructor-de-palindromos/](http://localhost:8000/constructor-de-palindromos/)
 
 ---
 
@@ -107,7 +107,7 @@ El projecte uneix dues col·leccions de corpus enriquits de manera programàtica
   * `palindromos_es_enriquecidos.json`: Corpus estructurat i verificat en espanyol.
   * `palindromos_cat_enriquecidos.json`: Corpus estructurat i verificat en català.
   * Scripts de processament de dades: `enriquecer.js`, `validar_enlaces.js`.
-* **`/juego-puzzle`**:
+* **`/constructor-de-palindromos`**:
   * `index.html`: Estructura HTML de la interfície del Constructor de Palíndroms.
   * `style.css`: Estils visuals del joc (suport d'animacions, temes clars i foscos).
   * `game.js`: Lògica interactiva del joc (moviment de fitxes, so Web Audio API, progressió intel·ligent de nivells).
@@ -133,7 +133,7 @@ A causa de que el navegador restringeix la lectura d'arxius JSON locals (`fetch`
    ```
 4. Obre el teu navegador de preferència i accedeix a:
    * **Lloc Principal i Explorador**: [http://localhost:8000](http://localhost:8000)
-   * **Constructor de Palíndroms (Joc)**: [http://localhost:8000/juego-puzzle/](http://localhost:8000/juego-puzzle/)
+   * **Constructor de Palíndroms (Joc)**: [http://localhost:8000/constructor-de-palindromos/](http://localhost:8000/constructor-de-palindromos/)
 
 ---
 
